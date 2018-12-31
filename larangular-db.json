@@ -1,0 +1,100 @@
+[
+    {
+        "type":"header",
+        "version":"4.8.3",
+        "comment":"Export to JSON plugin for PHPMyAdmin"
+    },
+    {
+        "type":"database",
+        "name":"larangular"
+    },
+    {
+        "type":"table",
+        "name":"migrations",
+        "database":"larangular",
+        "data":
+        [
+            {
+                "id":"1",
+                "migration":"2014_10_12_000000_create_users_table",
+                "batch":"1"
+            },
+            {
+                "id":"2",
+                "migration":"2014_10_12_100000_create_password_resets_table",
+                "batch":"1"
+            }
+        ]
+    },
+    {
+        "type":"table",
+        "name":"password_resets",
+        "database":"larangular",
+        "data":
+        [
+
+        ]
+    },
+    {
+        "type":"table",
+        "name":"subscribers",
+        "database":"larangular",
+        "data":
+        [
+            {
+                "id":"1",
+                "name":"Lorenzo Viberti",
+                "email":"viacolventoexperience@gmail.com",
+                "created_at":"2018-10-11 15:53:20"
+            },
+            {
+                "id":"2",
+                "name":"Davide Marino",
+                "email":"info@davidemarino.net",
+                "created_at":"2018-10-11 17:49:04"
+            },
+            {
+                "id":"6",
+                "name":"Riccardo Arduini",
+                "email":"rickyarduini@gmail.com",
+                "created_at":"2018-10-18 16:19:19"
+            },
+            {
+                "id":"7",
+                "name":"Pier Maria Baraldo",
+                "email":"pierwmaria@gmail.com",
+                "created_at":"2018-10-18 16:19:19"
+            },
+            {
+                "id":"8",
+                "name":"Federico Grisorio",
+                "email":"grifed94@gmail.com",
+                "created_at":"2018-10-18 17:39:14"
+            },
+            {
+                "id":"9",
+                "name":"Pinco Pallino",
+                "email":"pincopallino@gmail.com",
+                "created_at":"2018-10-22 11:01:37"
+            }
+        ]
+    },
+    {
+        "type":"table",
+        "name":"users",
+        "database":"larangular",
+        "data":
+        [
+            {
+                "id":"1",
+                "name":"Lorenzo Viberti",
+                "email":"viacolventoexperience@gmail.com",
+                "email_verified_at":null,
+                "password":"$2y$10$g3KmC2i\/5Dukfsfm5hN7peHruRUt6SCUaUm4fGWeFggih9iKNqWTy",
+                "remember_token":null,
+                "created_at":"2018-10-08 08:27:13",
+                "updated_at":"2018-10-12 21:18:08"
+            }
+        ]
+    }
+]
