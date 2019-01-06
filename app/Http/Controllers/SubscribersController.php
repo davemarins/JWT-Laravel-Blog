@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class SubscribersController extends Controller
 {
@@ -38,17 +39,28 @@ class SubscribersController extends Controller
         return !!DB::table('subscribers')->where('email', $email)->first();
     }
 
+    public function stats1() {
+        return DB::table('subscribersStats')->get();
+    }
+
+    public function stats2() {
+        return DB::table('subscribersStats')
+            ->select(DB::raw('avg(subscribers) as subs, month'))
+            ->groupBy('month')
+            ->get();
+    }
+
     public function successResponse()
     {
         return response()->json([
-            'success' => 'Unsubscription completed. Sorry for you to go away :('
+            'success' => 'Subscription/Unsubscription completed.'
         ], Response::HTTP_OK);
     }
 
     public function failedResponse()
     {
         return response()->json([
-            'error' => 'Email not found in our DB.'
+            'error' => 'Something went wrong.'
         ], Response::HTTP_NOT_FOUND);
     }
 
@@ -63,6 +75,28 @@ class SubscribersController extends Controller
             return $this->failedResponse();
         } else {
             DB::table('subscribers')->where('email', $request->email)->delete();
+            $now = Carbon::now();
+            $monthname = $now->format('F');
+            $stats = DB::table('subscribersStats')
+                ->where('week', $now->weekOfYear)
+                ->where('month', $monthname)
+                ->where('year', $now->year)
+                ->value('subscribers');
+            if($stats) {
+                DB::table('subscribersStats')
+                    ->where('week', $now->weekOfYear)
+                    ->where('month', $monthname)
+                    ->where('year', $now->year)
+                    ->update(['subscribers' => $stats - 1]);
+            } else {
+                $total = DB::table('subscribers')->count();
+                DB::table('subscribersStats')->insert(array(
+                    'week' => $now->weekOfYear,
+                    'month' => $monthname,
+                    'year' => $now->year,
+                    'subscribers' => $total)
+                );
+            }
             return $this->successResponse();
         }
     }
@@ -75,7 +109,30 @@ class SubscribersController extends Controller
     public function subscribe(SubscribeRequest $request)
     {
         if(!$this->validateEmail($request->email)) {
-            DB::table('subscribers')->insert(array('name' => $request->name, 'email' => $request->email));
+            DB::table('subscribers')
+                ->insert(array('name' => $request->name, 'email' => $request->email));
+            $now = Carbon::now();
+            $monthname = $now->format('F');
+            $stats = DB::table('subscribersStats')
+                ->where('week', $now->weekOfYear)
+                ->where('month', $monthname)
+                ->where('year', $now->year)
+                ->value('subscribers');
+            if($stats) {
+                DB::table('subscribersStats')
+                    ->where('week', $now->weekOfYear)
+                    ->where('month', $monthname)
+                    ->where('year', $now->year)
+                    ->update(['subscribers' => $stats + 1]);
+            } else {
+                $total = DB::table('subscribers')->count();
+                DB::table('subscribersStats')->insert(array(
+                    'week' => $now->weekOfYear, 
+                    'month' => $monthname, 
+                    'year' => $now->year, 
+                    'subscribers' => $total)
+                );
+            }
             return $this->successResponse();
         } else {
             return $this->failedResponse();
